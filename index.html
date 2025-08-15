@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Earnings Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        .date-inputs {
+            display: flex;
+            gap: 15px;
+        }
+
+        .date-inputs>div {
+            flex: 1;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .results {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .summary {
+            background-color: #e8f5e8;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .summary h3 {
+            margin-top: 0;
+            color: #2e7d32;
+        }
+
+        .error {
+            color: #d32f2f;
+            background-color: #ffebee;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        .negative {
+            color: #d32f2f;
+        }
+
+        .download-btn {
+            background-color: #2196F3;
+            margin-top: 15px;
+        }
+
+        .download-btn:hover {
+            background-color: #1976D2;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 30px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 5px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-button {
+            background-color: transparent;
+            border: none;
+            padding: 18px 35px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            flex: 1;
+            text-align: center;
+            color: #666;
+            margin: 0 3px;
+        }
+
+        .tab-button:hover {
+            background-color: #e9ecef;
+            color: #333;
+            transform: translateY(-1px);
+        }
+
+        .tab-button.active {
+            background-color: #4CAF50;
+            color: white;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .payscale-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .payscale-table th {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .payscale-table td {
+            padding: 6px 8px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .payscale-table .tier-label {
+            background-color: #f9f9f9;
+            font-weight: bold;
+            text-align: left;
+            padding-left: 10px;
+        }
+
+        .year-header {
+            background-color: #2196F3;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+            margin: 20px 0 10px 0;
+        }
+
+        .note-box {
+            margin: 15px 0;
+            padding: 10px;
+            border-left: 4px solid #ffc107;
+            background-color: #fff3cd;
+            font-style: italic;
+        }
+
+        .table-scroll {
+            overflow-x: auto;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .table-scroll table {
+            margin: 0;
+            min-width: 100%;
+            white-space: nowrap;
+        }
+
+        .table-scroll th,
+        .table-scroll td {
+            min-width: 80px;
+            padding: 8px 6px;
+        }
+
+        .table-scroll .tier-label {
+            min-width: 120px;
+            position: sticky;
+            left: 0;
+            background-color: #f9f9f9;
+            z-index: 1;
+            border-right: 2px solid #ddd;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Career Earnings Calculator</h1>
+        <p class="subtitle">Compare actual earnings vs. 2001 contract with inflation adjustments</p>
+
+        <!-- Tab Navigation -->
+        <div class="tabs">
+            <button type="button" class="tab-button active" onclick="showTab('calculator')">Calculator</button>
+            <button type="button" class="tab-button" onclick="showTab('payscales')">Pay Scales</button>
+            <button type="button" class="tab-button" onclick="showTab('hypothetical')">Hypothetical Contract</button>
+            <button type="button" class="tab-button" onclick="showTab('master')">Master Table</button>
+        </div>
+
+        <!-- Calculator Tab -->
+        <div id="calculator" class="tab-content active">
+            <form id="calculatorForm">
+                <div class="input-group">
+                    <label>Start Date:</label>
+                    <div class="date-inputs">
+                        <div>
+                            <label for="year">Year</label>
+                            <input type="number" id="year" min="1990" max="2023" value="2018" required>
+                        </div>
+                        <div>
+                            <label for="month">Month</label>
+                            <select id="month" required>
+                                <option value="1">January</option>
+                                <option value="2">February</option>
+                                <option value="3">March</option>
+                                <option value="4" selected>April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="day">Day</label>
+                            <input type="number" id="day" min="1" max="31" value="1" required>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit">Calculate Career Earnings</button>
+            </form>
+
+            <div id="error" class="error" style="display: none;"></div>
+
+            <div id="results" class="results">
+                <div class="summary">
+                    <h3>Summary</h3>
+                    <div id="summaryContent"></div>
+                </div>
+
+                <button id="downloadBtn" class="download-btn">Download Results as CSV</button>
+
+                <div id="tableContainer"></div>
+            </div>
+        </div>
+
+        <!-- Pay Scales Tab -->
+        <div id="payscales" class="tab-content">
+            <h2>Historical Pay Scales</h2>
+            <p>This shows the actual wage progression through all contract periods and amendments.</p>
+            <div id="payscaleContent"></div>
+        </div>
+
+        <!-- Hypothetical Contract Tab -->
+        <div id="hypothetical" class="tab-content">
+            <h2>Hypothetical: 2001 Contract + Inflation Only</h2>
+            <p>This shows what wages would be today if the 2001 contract had simply been adjusted for inflation each
+                year, without any cuts or restructuring.</p>
+            <div id="hypotheticalContent"></div>
+        </div>
+
+        <!-- Master Table Tab -->
+        <div id="master" class="tab-content">
+            <h2>Master Table: Actual Wages by Year (2001-2024)</h2>
+            <p>This shows the actual wages that were in effect each year, accounting for all amendments and contract
+                changes.</p>
+            <div id="masterContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const HOURS_PER_MONTH = 80;
+        const MONTHS_PER_YEAR = 12;
+        const ANNUAL_HOURS = HOURS_PER_MONTH * MONTHS_PER_YEAR;
+        const END_YEAR = 2024;
+
+        // Historical CPI data
+        const CPI_DATA = {
+            2001: 100.0, 2002: 102.3, 2003: 104.0, 2004: 105.9,
+            2005: 107.7, 2006: 109.8, 2007: 111.5, 2008: 114.1,
+            2009: 114.4, 2010: 116.5, 2011: 119.9, 2012: 121.7,
+            2013: 123.1, 2014: 125.7, 2015: 126.3, 2016: 128.4,
+            2017: 130.4, 2018: 133.4, 2019: 136.0, 2020: 137.0,
+            2021: 142.0, 2022: 153.0, 2023: 157.0, 2024: 160.0
+        };
+
+        // 2001 Contract Data
+        const CONTRACT_2001 = {
+            tiers: [
+                [0, 0.5, "1st 6 months"],
+                [0.5, 1.0, "2nd 6 months"],
+                [1.0, 1.5, "3rd 6 months"],
+                [1.5, 2.0, "4th 6 months"],
+                [2.0, 2.5, "5th 6 months"],
+                [2.5, 3.0, "6th 6 months"],
+                [3.0, 4.0, "4th year"],
+                [4.0, 5.0, "5th year"],
+                [5.0, 6.0, "6th year"],
+                [6.0, 7.0, "7th year"],
+                [7.0, 8.0, "8th year"]
+            ],
+            wages: {
+                "1st 6 months": 27.84,
+                "2nd 6 months": 30.32,
+                "3rd 6 months": 35.01,
+                "4th 6 months": 37.42,
+                "5th 6 months": 38.32,
+                "6th 6 months": 39.64,
+                "4th year": 42.75,
+                "5th year": 44.78,
+                "6th year": 46.79,
+                "7th year": 49.45,
+                "8th year": 51.36
+            }
+        };
+
+        // Historical contracts data
+        const CONTRACTS = {
+            "2001-2003": {
+                tiers: CONTRACT_2001.tiers,
+                wages: {
+                    2001: [27.84, 30.32, 35.01, 37.42, 38.32, 39.64, 42.75, 44.78, 46.79, 49.45, 51.36],
+                    2002: [28.54, 30.99, 35.68, 38.06, 39.28, 40.63, 43.39, 45.60, 47.96, 50.38, 52.63],
+                    2003: [29.22, 31.76, 36.79, 39.01, 40.06, 41.65, 44.03, 47.05, 49.46, 51.64, 53.86]
+                },
+                endDate: "2003-05-31"
+            },
+            "2003-2004": {
+                tiers: CONTRACT_2001.tiers,
+                wages: {
+                    2003: [27.51, 29.54, 34.63, 36.72, 37.91, 39.21, 42.29, 44.30, 46.28, 48.61, 50.79],
+                    2004: [27.51, 29.54, 34.63, 36.72, 37.91, 39.21, 42.29, 44.30, 46.28, 48.61, 50.79]
+                },
+                endDate: "2004-06-30"
+            },
+            "2004-2014": {
+                tiers: [
+                    [0, 1.0, "0-12 months"],
+                    [1.0, 1.5, "13-18 months"],
+                    [1.5, 2.0, "19-24 months"],
+                    [2.0, 2.5, "25-30 months"],
+                    [2.5, 3.0, "31-36 months"],
+                    [3.0, 3.5, "37-42 months"],
+                    [3.5, 4.0, "43-48 months"],
+                    [4.0, 4.5, "49-54 months"],
+                    [4.5, 5.0, "55-60 months"],
+                    [5.0, 6.0, "6th year"],
+                    [6.0, 7.0, "7th year"],
+                    [7.0, 8.0, "8th year"],
+                    [8.0, 9.0, "9th year"],
+                    [9.0, 10.0, "10th year"]
+                ],
+                wages: {},
+                endDate: "2014-12-31"
+            },
+            "2015-2024": {
+                tiers: [
+                    [0, 1.0, "0-12 months"],
+                    [1.0, 1.5, "13-18 months"],
+                    [1.5, 2.0, "19-24 months"],
+                    [2.0, 2.5, "25-30 months"],
+                    [2.5, 3.0, "31-36 months"],
+                    [3.0, 3.5, "37-42 months"],
+                    [3.5, 4.0, "43-48 months"],
+                    [4.0, 4.5, "49-54 months"],
+                    [4.5, 5.0, "55-60 months"],
+                    [5.0, 6.0, "6th year"],
+                    [6.0, 7.0, "7th year"],
+                    [7.0, 8.0, "8th year"],
+                    [8.0, 9.0, "9th year"],
+                    [9.0, 10.0, "10th year"]
+                ],
+                wages: {
+                    2015: [25.13, 26.28, 27.42, 28.58, 30.68, 35.98, 38.15, 39.38, 40.74, 43.93, 46.02, 48.07, 50.50, 52.76],
+                    2016: [25.63, 26.81, 27.97, 29.15, 31.29, 36.70, 38.91, 40.17, 41.55, 44.81, 46.94, 49.03, 51.51, 53.82],
+                    2017: [26.14, 27.35, 28.53, 29.73, 31.92, 37.43, 39.69, 40.97, 42.38, 45.71, 47.88, 50.01, 52.54, 54.90],
+                    2018: [26.66, 27.90, 29.10, 30.32, 32.56, 38.18, 40.48, 41.79, 43.23, 46.62, 48.84, 51.01, 53.59, 56.00],
+                    2019: [27.19, 28.46, 29.68, 30.93, 33.21, 38.94, 41.29, 42.63, 44.09, 47.55, 49.82, 52.03, 54.66, 57.12],
+                    2020: [27.73, 29.03, 30.27, 31.55, 33.87, 39.72, 42.12, 43.48, 44.97, 48.50, 50.82, 53.07, 55.75, 58.26],
+                    2021: [28.28, 29.61, 30.88, 32.18, 34.55, 40.51, 42.96, 44.35, 45.87, 49.47, 51.84, 54.13, 56.87, 59.43],
+                    2022: [28.85, 30.20, 31.50, 32.82, 35.24, 41.32, 43.82, 45.24, 46.79, 50.46, 52.88, 55.21, 58.01, 60.62],
+                    2023: [29.43, 30.80, 32.13, 33.48, 35.94, 42.15, 44.70, 46.14, 47.73, 51.47, 53.94, 56.31, 59.17, 61.83],
+                    2024: [30.02, 31.42, 32.77, 34.15, 36.66, 42.99, 45.59, 47.06, 48.68, 52.50, 55.02, 57.44, 60.35, 63.07]
+                },
+                endDate: "2024-12-31"
+            }
+        };
+
+        // Fill in 2004-2014 wages
+        const wages2004_2014 = [21.76, 22.76, 23.76, 24.76, 26.59, 31.17, 33.05, 34.12, 35.29, 38.06, 39.87, 41.65, 43.75, 45.71];
+        for (let year = 2004; year <= 2014; year++) {
+            CONTRACTS["2004-2014"].wages[year] = [...wages2004_2014];
+        }
+
+        function validateDate(year, month, day) {
+            const daysInMonth = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            if (month < 1 || month > 12) return false;
+            if (day < 1 || day > daysInMonth[month - 1]) return false;
+            if (month === 2 && day === 29) {
+                const isLeapYear = (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+                if (!isLeapYear) return false;
+            }
+            return true;
+        }
+
+        function getContractAndTier(date, yearsOfService) {
+            for (const [contractName, contract] of Object.entries(CONTRACTS)) {
+                const [startYear] = contractName.split("-");
+                const contractStart = new Date(parseInt(startYear), 0, 1);
+                const endDateParts = contract.endDate.split("-");
+                const contractEnd = new Date(parseInt(endDateParts[0]), parseInt(endDateParts[1]) - 1, parseInt(endDateParts[2]));
+
+                if (date >= contractStart && date <= contractEnd) {
+                    for (let i = 0; i < contract.tiers.length; i++) {
+                        const [low, high, name] = contract.tiers[i];
+                        if (yearsOfService >= low && yearsOfService < high) {
+                            return [contract, i, name];
+                        }
+                    }
+                    // If no tier matches, use the first tier (not the last)
+                    if (yearsOfService < contract.tiers[0][0]) {
+                        return [contract, 0, contract.tiers[0][2]];
+                    }
+                    // If service exceeds highest tier, use max tier
+                    const maxTier = contract.tiers.length - 1;
+                    return [contract, maxTier, contract.tiers[maxTier][2]];
+                }
+            }
+
+            const lastContract = CONTRACTS["2015-2024"];
+            const maxTier = lastContract.tiers.length - 1;
+            return [lastContract, maxTier, lastContract.tiers[maxTier][2]];
+        }
+
+        function get2001Tier(yearsOfService) {
+            for (const [low, high, name] of CONTRACT_2001.tiers) {
+                if (yearsOfService >= low && yearsOfService < high) {
+                    return [name, CONTRACT_2001.wages[name]];
+                }
+            }
+            // If no tier matches, check if service is less than first tier
+            if (yearsOfService < CONTRACT_2001.tiers[0][0]) {
+                const firstTier = CONTRACT_2001.tiers[0];
+                return [firstTier[2], CONTRACT_2001.wages[firstTier[2]]];
+            }
+            // If service exceeds highest tier, use last tier
+            const lastTier = CONTRACT_2001.tiers[CONTRACT_2001.tiers.length - 1];
+            return [lastTier[2], CONTRACT_2001.wages[lastTier[2]]];
+        }
+
+        function calculateHypotheticalWage(yearsOfService, year) {
+            const [tierName, baseWage] = get2001Tier(yearsOfService);
+            const inflationFactor = CPI_DATA[year] / CPI_DATA[2001];
+            return [baseWage * inflationFactor, `2001 ${tierName} + inflation`];
+        }
+
+        function calculateEarnings(startDate) {
+            const results = [];
+            let cumulativeDifference = 0;
+
+            const calculationStartYear = Math.max(startDate.getFullYear(), 2001);
+
+            for (let year = calculationStartYear; year <= END_YEAR; year++) {
+                const midYearDate = new Date(year, 6, 1);
+                const yearsOfService = (midYearDate - startDate) / (365.25 * 24 * 60 * 60 * 1000);
+
+                const [contract, tierIndex, tierName] = getContractAndTier(midYearDate, yearsOfService);
+
+                let actualWage;
+                if (contract.wages[year]) {
+                    actualWage = contract.wages[year][tierIndex];
+                } else {
+                    const lastYear = Math.max(...Object.keys(contract.wages).map(Number));
+                    actualWage = contract.wages[lastYear][tierIndex];
+                }
+
+                const actualEarnings = actualWage * ANNUAL_HOURS;
+
+                const [hypotheticalWage, hypotheticalTier] = calculateHypotheticalWage(yearsOfService, year);
+                const hypotheticalEarnings = hypotheticalWage * ANNUAL_HOURS;
+
+                const difference = actualEarnings - hypotheticalEarnings;
+                cumulativeDifference += difference;
+
+                const prevCpi = CPI_DATA[year - 1] || CPI_DATA[year];
+                const inflationRate = ((CPI_DATA[year] / prevCpi) - 1) * 100;
+
+                results.push({
+                    year,
+                    yearsService: Math.round(yearsOfService * 100) / 100,
+                    actualTier: tierName,
+                    actualWage,
+                    actualEarnings,
+                    hypotheticalTier,
+                    hypotheticalWage,
+                    hypotheticalEarnings,
+                    difference,
+                    cumulativeDifference,
+                    inflationRate
+                });
+            }
+
+            return results;
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-CA', {
+                style: 'currency',
+                currency: 'CAD'
+            }).format(amount);
+        }
+
+        function displayResults(results, startDate) {
+            const resultsDiv = document.getElementById('results');
+            const summaryDiv = document.getElementById('summaryContent');
+            const tableContainer = document.getElementById('tableContainer');
+
+            const totalYears = results.length;
+            const finalCumulativeDifference = results[results.length - 1].cumulativeDifference;
+            const avgAnnualDifference = finalCumulativeDifference / totalYears;
+            const finalActualWage = results[results.length - 1].actualWage;
+            const finalHypotheticalWage = results[results.length - 1].hypotheticalWage;
+
+            // Calculate total career earnings
+            const totalActualEarnings = results.reduce((sum, row) => sum + row.actualEarnings, 0);
+            const totalHypotheticalEarnings = results.reduce((sum, row) => sum + row.hypotheticalEarnings, 0);
+
+            summaryDiv.innerHTML = `
+                <p><strong>Start Date:</strong> ${startDate.toLocaleDateString()}</p>
+                <p><strong>Career Period:</strong> ${results[0].year} - ${results[results.length - 1].year} (${totalYears} years)</p>
+                <p><strong>2024 Actual Wage:</strong> ${formatCurrency(finalActualWage)}/hour</p>
+                <p><strong>2024 Hypothetical Wage:</strong> ${formatCurrency(finalHypotheticalWage)}/hour (2001 contract + inflation)</p>
+                <p><strong>Total Career Earnings:</strong> ${formatCurrency(totalActualEarnings)}</p>
+                <p><strong>Total Career Difference:</strong> <span class="${finalCumulativeDifference < 0 ? 'negative' : ''}">${formatCurrency(finalCumulativeDifference)}</span></p>
+                <p><strong>Average Annual Difference:</strong> <span class="${avgAnnualDifference < 0 ? 'negative' : ''}">${formatCurrency(avgAnnualDifference)}</span></p>
+            `;
+
+            let tableHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Year</th>
+                            <th>Years of Service</th>
+                            <th>Actual Tier</th>
+                            <th>Actual Wage</th>
+                            <th>Actual Earnings</th>
+                            <th>Hypothetical Earnings</th>
+                            <th>Annual Difference</th>
+                            <th>Cumulative Difference</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            results.forEach(row => {
+                tableHTML += `
+                    <tr>
+                        <td>${row.year}</td>
+                        <td>${row.yearsService}</td>
+                        <td>${row.actualTier}</td>
+                        <td>${formatCurrency(row.actualWage)}</td>
+                        <td><strong>${formatCurrency(row.actualEarnings)}</strong></td>
+                        <td><em>${formatCurrency(row.hypotheticalEarnings)}</em></td>
+                        <td class="${row.difference < 0 ? 'negative' : ''}">${formatCurrency(row.difference)}</td>
+                        <td class="${row.cumulativeDifference < 0 ? 'negative' : ''}">${formatCurrency(row.cumulativeDifference)}</td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += '</tbody></table>';
+            tableContainer.innerHTML = tableHTML;
+
+            resultsDiv.style.display = 'block';
+
+            window.calculationResults = results;
+            window.calculationStartDate = startDate;
+        }
+
+        function downloadCSV() {
+            if (!window.calculationResults) return;
+
+            const results = window.calculationResults;
+            const startDate = window.calculationStartDate;
+
+            let csv = 'Year,Years of Service,Actual Tier,Actual Hourly Wage,Actual Annual Earnings,Hypothetical Tier,Hypothetical Hourly Wage (2001 base + inflation),Hypothetical Annual Earnings,Annual Earnings Difference (Actual - Hypothetical),Cumulative Earnings Difference,Inflation Rate (%)\n';
+
+            results.forEach(row => {
+                csv += `${row.year},${row.yearsService.toFixed(2)},"${row.actualTier}","${formatCurrency(row.actualWage)}","${formatCurrency(row.actualEarnings)}","${row.hypotheticalTier}","${formatCurrency(row.hypotheticalWage)}","${formatCurrency(row.hypotheticalEarnings)}","${formatCurrency(row.difference)}","${formatCurrency(row.cumulativeDifference)}","${row.inflationRate.toFixed(2)}%"\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `career_earnings_comparison_${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}-${String(startDate.getDate()).padStart(2, '0')}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Event listeners
+        document.getElementById('calculatorForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const year = parseInt(document.getElementById('year').value);
+            const month = parseInt(document.getElementById('month').value);
+            const day = parseInt(document.getElementById('day').value);
+
+            const errorDiv = document.getElementById('error');
+            errorDiv.style.display = 'none';
+
+            if (!validateDate(year, month, day)) {
+                errorDiv.textContent = 'Please enter a valid date.';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            if (year > 2023) {
+                errorDiv.textContent = 'Start year cannot be after 2023.';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            const startDate = new Date(year, month - 1, day);
+            const results = calculateEarnings(startDate);
+            displayResults(results, startDate);
+        });
+
+        document.getElementById('downloadBtn').addEventListener('click', downloadCSV);
+
+        // Tab functionality
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+
+            // Remove active class from all tab buttons
+            const tabButtons = document.querySelectorAll('.tab-button');
+            tabButtons.forEach(button => button.classList.remove('active'));
+
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+
+            // Add active class to clicked button
+            event.target.classList.add('active');
+
+            // Generate content based on selected tab
+            if (tabName === 'payscales') {
+                generatePayScales();
+            } else if (tabName === 'hypothetical') {
+                generateHypotheticalContract();
+            } else if (tabName === 'master') {
+                generateMasterTable();
+            }
+        }
+
+        function generatePayScales() {
+            const container = document.getElementById('payscaleContent');
+
+            let html = '';
+
+            // Original 2001-2009 Contract (all 4 columns)
+            html += '<div class="year-header">Original 2001-2009 Contract (As Negotiated)</div>';
+            html += '<table class="payscale-table">';
+            html += '<thead><tr><th>Service Tier</th><th>2001</th><th>2002</th><th>2003 (Original)</th><th>2004 (Original)</th></tr></thead><tbody>';
+
+            const tiers2001 = ["1st 6 months", "2nd 6 months", "3rd 6 months", "4th 6 months", "5th 6 months", "6th 6 months", "4th year", "5th year", "6th year", "7th year", "8th year"];
+            const wages2001 = [27.84, 30.32, 35.01, 37.42, 38.32, 39.64, 42.75, 44.78, 46.79, 49.45, 51.36];
+            const wages2002 = [28.54, 30.99, 35.68, 38.06, 39.28, 40.63, 43.39, 45.60, 47.96, 50.38, 52.63];
+            const wages2003_original = [29.22, 31.76, 36.79, 39.01, 40.06, 41.65, 44.03, 47.05, 49.46, 51.64, 53.86];
+            const wages2004_original = [29.95, 32.55, 37.71, 39.99, 41.06, 42.69, 45.13, 48.22, 50.69, 52.93, 55.20];
+
+            for (let i = 0; i < tiers2001.length; i++) {
+                html += `<tr>`;
+                html += `<td class="tier-label">${tiers2001[i]}</td>`;
+                html += `<td>$${wages2001[i].toFixed(2)}</td>`;
+                html += `<td>$${wages2002[i].toFixed(2)}</td>`;
+                html += `<td>$${wages2003_original[i].toFixed(2)}</td>`;
+                html += `<td>$${wages2004_original[i].toFixed(2)}</td>`;
+                html += `</tr>`;
+            }
+            html += '</tbody></table>';
+            html += '<p class="note-box">This shows the original 2003 and 2004 wages as they would have been without amendments.</p>';
+
+            // 2003 Amendment
+            html += '<div class="year-header">2003 Amendment (First Cut)</div>';
+            html += '<table class="payscale-table">';
+            html += '<thead><tr><th>Service Tier</th><th>2003 Amended Rate</th></tr></thead><tbody>';
+
+            const wages2003_amended = [27.51, 29.54, 34.63, 36.72, 37.91, 39.21, 42.29, 44.30, 46.28, 48.61, 50.79];
+
+            for (let i = 0; i < tiers2001.length; i++) {
+                html += `<tr>`;
+                html += `<td class="tier-label">${tiers2001[i]}</td>`;
+                html += `<td>$${wages2003_amended[i].toFixed(2)}</td>`;
+                html += `</tr>`;
+            }
+            html += '</tbody></table>';
+
+            // 2004 Amendment
+            html += '<div class="year-header">2004 Amendment (Second Cut + Tier Restructure)</div>';
+            html += '<table class="payscale-table">';
+            html += '<thead><tr><th>Service Tier</th><th>2004 Amended Rate</th></tr></thead><tbody>';
+
+            const tiers2004 = ["0-12 months", "13-18 months", "19-24 months", "25-30 months", "31-36 months", "37-42 months", "43-48 months", "49-54 months", "55-60 months", "6th year", "7th year", "8th year", "9th year", "10th year"];
+            const wages2004_amended = [21.76, 22.76, 23.76, 24.76, 26.59, 31.17, 33.05, 34.12, 35.29, 38.06, 39.87, 41.65, 43.75, 45.71];
+
+            for (let i = 0; i < tiers2004.length; i++) {
+                html += `<tr>`;
+                html += `<td class="tier-label">${tiers2004[i]}</td>`;
+                html += `<td>$${wages2004_amended[i].toFixed(2)}</td>`;
+                html += `</tr>`;
+            }
+            html += '</tbody></table>';
+            html += '<p class="note-box">This amendment also restructured the tier system from 6-month increments to the current structure.</p>';
+
+            // Gap note
+            html += '<p class="note-box">No contract data available for 2009-2011 period. Using the latest amended numbers (2004 rates) for those years.</p>';
+
+            // 2011-2014 Contract
+            html += '<div class="year-header">2011-2014 Contract Period</div>';
+            html += '<table class="payscale-table">';
+            html += '<thead><tr><th>Service Tier</th><th>2011</th><th>2012</th><th>2013</th><th>2014</th></tr></thead><tbody>';
+
+            const wages2011 = [23.45, 24.52, 25.59, 26.67, 28.63, 33.58, 35.60, 36.75, 38.02, 40.99, 42.94, 44.86, 47.12, 49.24];
+            const wages2012 = [23.92, 25.01, 26.10, 27.21, 29.20, 34.25, 36.31, 37.49, 38.78, 41.81, 43.80, 45.76, 48.07, 50.22];
+            const wages2013 = [24.40, 25.51, 26.63, 27.75, 29.79, 34.93, 37.04, 38.24, 39.55, 42.65, 44.68, 46.67, 49.03, 51.22];
+            const wages2014 = [25.13, 26.28, 27.42, 28.58, 30.68, 35.98, 38.15, 39.38, 40.74, 43.93, 46.02, 48.07, 50.50, 52.76];
+
+            for (let i = 0; i < tiers2004.length; i++) {
+                html += `<tr>`;
+                html += `<td class="tier-label">${tiers2004[i]}</td>`;
+                html += `<td>$${wages2011[i].toFixed(2)}</td>`;
+                html += `<td>$${wages2012[i].toFixed(2)}</td>`;
+                html += `<td>$${wages2013[i].toFixed(2)}</td>`;
+                html += `<td>$${wages2014[i].toFixed(2)}</td>`;
+                html += `</tr>`;
+            }
+            html += '</tbody></table>';
+
+            // 2015-2024 Contract
+            html += '<div class="year-header">2015-2024 Contract Period</div>';
+            html += '<table class="payscale-table">';
+            html += '<thead><tr><th>Service Tier</th><th>2015</th><th>2018</th><th>2021</th><th>2024</th></tr></thead><tbody>';
+
+            const wages2015 = [25.13, 26.28, 27.42, 28.58, 30.68, 35.98, 38.15, 39.38, 40.74, 43.93, 46.02, 48.07, 50.50, 52.76];
+            const wages2018 = [26.66, 27.90, 29.10, 30.32, 32.56, 38.18, 40.48, 41.79, 43.23, 46.62, 48.84, 51.01, 53.59, 56.00];
+            const wages2021 = [28.28, 29.61, 30.88, 32.18, 34.55, 40.51, 42.96, 44.35, 45.87, 49.47, 51.84, 54.13, 56.87, 59.43];
+            const wages2024 = [30.02, 31.42, 32.77, 34.15, 36.66, 42.99, 45.59, 47.06, 48.68, 52.50, 55.02, 57.44, 60.35, 63.07];
+
+            for (let i = 0; i < tiers2004.length; i++) {
+                html += `<tr>`;
+                html += `<td class="tier-label">${tiers2004[i]}</td>`;
+                html += `<td>$${wages2015[i].toFixed(2)}</td>`;
+                html += `<td>$${wages2018[i].toFixed(2)}</td>`;
+                html += `<td>$${wages2021[i].toFixed(2)}</td>`;
+                html += `<td>$${wages2024[i].toFixed(2)}</td>`;
+                html += `</tr>`;
+            }
+            html += '</tbody></table>';
+
+            container.innerHTML = html;
+        }
+
+        function generateHypotheticalContract() {
+            const container = document.getElementById('hypotheticalContent');
+
+            let html = '';
+
+            // 2001 Contract Adjusted for Inflation Only
+            html += '<div class="year-header">2001 Contract Adjusted for Inflation Only</div>';
+            html += '<table class="payscale-table">';
+            html += '<thead><tr><th>Service Tier</th><th>2001</th><th>2005</th><th>2010</th><th>2015</th><th>2020</th><th>2024</th></tr></thead><tbody>';
+
+            const tiers2001 = ["1st 6 months", "2nd 6 months", "3rd 6 months", "4th 6 months", "5th 6 months", "6th 6 months", "4th year", "5th year", "6th year", "7th year", "8th year"];
+            const baseWages2001 = [27.84, 30.32, 35.01, 37.42, 38.32, 39.64, 42.75, 44.78, 46.79, 49.45, 51.36];
+
+            const years = [2001, 2005, 2010, 2015, 2020, 2024];
+
+            for (let i = 0; i < tiers2001.length; i++) {
+                html += `<tr>`;
+                html += `<td class="tier-label">${tiers2001[i]}</td>`;
+
+                for (const year of years) {
+                    const inflationFactor = CPI_DATA[year] / CPI_DATA[2001];
+                    const adjustedWage = baseWages2001[i] * inflationFactor;
+                    html += `<td>$${adjustedWage.toFixed(2)}</td>`;
+                }
+
+                html += `</tr>`;
+            }
+            html += '</tbody></table>';
+
+            html += '<p class="note-box">This table shows what wages would be today if the 2001 contract had simply been adjusted for inflation each year, without any cuts or restructuring.</p>';
+
+            // Canada's Annual Inflation Rate table
+            html += '<div class="year-header" style="margin-top: 40px;">Canada\'s Annual Inflation Rate (2001-2024)</div>';
+            html += '<table class="payscale-table">';
+            html += '<thead><tr><th>Year</th><th>CPI Index</th><th>Annual Inflation Rate</th><th>Cumulative Inflation Since 2001</th></tr></thead><tbody>';
+
+            const inflationYears = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024];
+
+            for (let i = 0; i < inflationYears.length; i++) {
+                const year = inflationYears[i];
+                const cpi = CPI_DATA[year];
+                const prevCpi = i > 0 ? CPI_DATA[inflationYears[i - 1]] : CPI_DATA[2001];
+                const annualRate = i > 0 ? ((cpi / prevCpi - 1) * 100) : 0;
+                const cumulativeRate = ((cpi / CPI_DATA[2001] - 1) * 100);
+
+                html += `<tr>`;
+                html += `<td style="text-align: center; font-weight: bold;">${year}</td>`;
+                html += `<td style="text-align: center;">${cpi.toFixed(1)}</td>`;
+                html += `<td style="text-align: center;">${annualRate.toFixed(1)}%</td>`;
+                html += `<td style="text-align: center;">${cumulativeRate.toFixed(1)}%</td>`;
+                html += `</tr>`;
+            }
+            html += '</tbody></table>';
+
+            html += '<p class="note-box"><strong>How to read this:</strong> The CPI Index shows the cost of living. Annual Inflation Rate shows year-over-year price increases. Cumulative Inflation shows total price increases since 2001. For example, by 2024, prices increased 60% compared to 2001.</p>';
+
+            container.innerHTML = html;
+        }
+
+        function generateMasterTable() {
+            const container = document.getElementById('masterContent');
+
+            let html = '';
+
+            // Master table showing actual wages by year
+            html += '<div class="year-header">Actual Wages by Year (2001-2024)</div>';
+            html += '<div class="table-scroll">';
+            html += '<table class="payscale-table">';
+            html += '<thead><tr><th>Service Tier</th>';
+
+            // Add year headers
+            for (let year = 2001; year <= 2024; year++) {
+                html += `<th>${year}</th>`;
+            }
+            html += '</tr></thead><tbody>';
+
+            // Define all wage data by year and source
+            const masterWageData = {
+                // Original contract wages (2001-2002)
+                2001: [27.84, 30.32, 35.01, 37.42, 38.32, 39.64, 42.75, 44.78, 46.79, 49.45, 51.36],
+                2002: [28.54, 30.99, 35.68, 38.06, 39.28, 40.63, 43.39, 45.60, 47.96, 50.38, 52.63],
+                // 2003 amendment (first cut)
+                2003: [27.51, 29.54, 34.63, 36.72, 37.91, 39.21, 42.29, 44.30, 46.28, 48.61, 50.79],
+                // 2004-2010 amendment (second cut + restructured tiers)
+                2004: [21.76, 22.76, 23.76, 24.76, 26.59, 31.17, 33.05, 34.12, 35.29, 38.06, 39.87, 41.65, 43.75, 45.71],
+                2005: [21.76, 22.76, 23.76, 24.76, 26.59, 31.17, 33.05, 34.12, 35.29, 38.06, 39.87, 41.65, 43.75, 45.71],
+                2006: [21.76, 22.76, 23.76, 24.76, 26.59, 31.17, 33.05, 34.12, 35.29, 38.06, 39.87, 41.65, 43.75, 45.71],
+                2007: [21.76, 22.76, 23.76, 24.76, 26.59, 31.17, 33.05, 34.12, 35.29, 38.06, 39.87, 41.65, 43.75, 45.71],
+                2008: [21.76, 22.76, 23.76, 24.76, 26.59, 31.17, 33.05, 34.12, 35.29, 38.06, 39.87, 41.65, 43.75, 45.71],
+                2009: [21.76, 22.76, 23.76, 24.76, 26.59, 31.17, 33.05, 34.12, 35.29, 38.06, 39.87, 41.65, 43.75, 45.71],
+                2010: [21.76, 22.76, 23.76, 24.76, 26.59, 31.17, 33.05, 34.12, 35.29, 38.06, 39.87, 41.65, 43.75, 45.71],
+                // 2011-2014 contract
+                2011: [23.45, 24.52, 25.59, 26.67, 28.63, 33.58, 35.60, 36.75, 38.02, 40.99, 42.94, 44.86, 47.12, 49.24],
+                2012: [23.92, 25.01, 26.10, 27.21, 29.20, 34.25, 36.31, 37.49, 38.78, 41.81, 43.80, 45.76, 48.07, 50.22],
+                2013: [24.40, 25.51, 26.63, 27.75, 29.79, 34.93, 37.04, 38.24, 39.55, 42.65, 44.68, 46.67, 49.03, 51.22],
+                2014: [25.13, 26.28, 27.42, 28.58, 30.68, 35.98, 38.15, 39.38, 40.74, 43.93, 46.02, 48.07, 50.50, 52.76],
+                // 2015-2024 contract
+                2015: [25.13, 26.28, 27.42, 28.58, 30.68, 35.98, 38.15, 39.38, 40.74, 43.93, 46.02, 48.07, 50.50, 52.76],
+                2016: [25.63, 26.81, 27.97, 29.15, 31.29, 36.70, 38.91, 40.17, 41.55, 44.81, 46.94, 49.03, 51.51, 53.82],
+                2017: [26.14, 27.35, 28.53, 29.73, 31.92, 37.43, 39.69, 40.97, 42.38, 45.71, 47.88, 50.01, 52.54, 54.90],
+                2018: [26.66, 27.90, 29.10, 30.32, 32.56, 38.18, 40.48, 41.79, 43.23, 46.62, 48.84, 51.01, 53.59, 56.00],
+                2019: [27.19, 28.46, 29.68, 30.93, 33.21, 38.94, 41.29, 42.63, 44.09, 47.55, 49.82, 52.03, 54.66, 57.12],
+                2020: [27.73, 29.03, 30.27, 31.55, 33.87, 39.72, 42.12, 43.48, 44.97, 48.50, 50.82, 53.07, 55.75, 58.26],
+                2021: [28.28, 29.61, 30.88, 32.18, 34.55, 40.51, 42.96, 44.35, 45.87, 49.47, 51.84, 54.13, 56.87, 59.43],
+                2022: [28.85, 30.20, 31.50, 32.82, 35.24, 41.32, 43.82, 45.24, 46.79, 50.46, 52.88, 55.21, 58.01, 60.62],
+                2023: [29.43, 30.80, 32.13, 33.48, 35.94, 42.15, 44.70, 46.14, 47.73, 51.47, 53.94, 56.31, 59.17, 61.83],
+                2024: [30.02, 31.42, 32.77, 34.15, 36.66, 42.99, 45.59, 47.06, 48.68, 52.50, 55.02, 57.44, 60.35, 63.07]
+            };
+
+            // Define tier labels (use 2004+ structure for consistency)
+            const masterTiers = ["0-12 months", "13-18 months", "19-24 months", "25-30 months", "31-36 months", "37-42 months", "43-48 months", "49-54 months", "55-60 months", "6th year", "7th year", "8th year", "9th year", "10th year"];
+
+            // Generate rows for each tier
+            for (let tierIndex = 0; tierIndex < masterTiers.length; tierIndex++) {
+                html += `<tr>`;
+                html += `<td class="tier-label">${masterTiers[tierIndex]}</td>`;
+
+                for (let year = 2001; year <= 2024; year++) {
+                    const yearWages = masterWageData[year];
+                    let wage = 0;
+
+                    if (year <= 2003) {
+                        // For 2001-2003, map to old tier structure (only 11 tiers)
+                        if (tierIndex < 11) {
+                            wage = yearWages[tierIndex];
+                        } else {
+                            wage = yearWages[10]; // Use highest available tier
+                        }
+                    } else {
+                        // For 2004+, use new tier structure (14 tiers)
+                        wage = yearWages[tierIndex] || yearWages[yearWages.length - 1];
+                    }
+
+                    // Color coding based on contract period
+                    let cellClass = '';
+                    if (year <= 2002) {
+                        cellClass = 'style="background-color: #e8f5e8;"'; // Green for original
+                    } else if (year === 2003) {
+                        cellClass = 'style="background-color: #fff3cd;"'; // Yellow for first cut
+                    } else if (year >= 2004 && year <= 2010) {
+                        cellClass = 'style="background-color: #ffebee;"'; // Red for second cut
+                    } else if (year >= 2011 && year <= 2014) {
+                        cellClass = 'style="background-color: #e3f2fd;"'; // Blue for recovery
+                    } else {
+                        cellClass = 'style="background-color: #f3e5f5;"'; // Purple for current
+                    }
+
+                    html += `<td ${cellClass}>$${wage.toFixed(2)}</td>`;
+                }
+
+                html += `</tr>`;
+            }
+
+            html += '</tbody></table>';
+            html += '</div>'; // Close table-scroll div
+
+            // Legend
+            html += '<div style="margin-top: 20px;">';
+            html += '<h3>Legend:</h3>';
+            html += '<div style="display: flex; gap: 20px; flex-wrap: wrap;">';
+            html += '<div><span style="background-color: #e8f5e8; padding: 5px 10px; border-radius: 3px;">2001-2002</span> Original Contract</div>';
+            html += '<div><span style="background-color: #fff3cd; padding: 5px 10px; border-radius: 3px;">2003</span> First Amendment (Cut)</div>';
+            html += '<div><span style="background-color: #ffebee; padding: 5px 10px; border-radius: 3px;">2004-2010</span> Second Amendment (10% Cut + Restructure)</div>';
+            html += '<div><span style="background-color: #e3f2fd; padding: 5px 10px; border-radius: 3px;">2011-2014</span> Recovery Contract</div>';
+            html += '<div><span style="background-color: #f3e5f5; padding: 5px 10px; border-radius: 3px;">2015-2024</span> Current Contract</div>';
+            html += '</div>';
+            html += '</div>';
+
+            html += '<p class="note-box" style="margin-top: 20px;"><strong>Note:</strong> This table shows the actual wages that were in effect each year. 2001-2003 used the original 6-month tier structure, while 2004+ used the restructured tier system. For years 2005-2010, no contract data was available so 2004 rates were continued.</p>';
+
+            container.innerHTML = html;
+        }
+
+        // Make showTab function global
+        window.showTab = showTab;
+
+        document.getElementById('month').addEventListener('change', function () {
+            const month = parseInt(this.value);
+            const dayInput = document.getElementById('day');
+            const currentDay = parseInt(dayInput.value);
+
+            const daysInMonth = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            const maxDay = daysInMonth[month - 1];
+
+            dayInput.max = maxDay;
+            if (currentDay > maxDay) {
+                dayInput.value = maxDay;
+            }
+        });
+    </script>
+</body>
+
+</html>
